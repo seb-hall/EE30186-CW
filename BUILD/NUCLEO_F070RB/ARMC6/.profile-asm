@@ -1,0 +1,20 @@
+{
+    "flags": [
+        "--cpu=Cortex-M0",
+        "--ide=mbed",
+        "--library_type=microlib"
+    ],
+    "macros": [],
+    "symbols": [
+        "ARM_MATH_CM0",
+        "CMSIS_VECTAB_VIRTUAL",
+        "CMSIS_VECTAB_VIRTUAL_HEADER_FILE=\"cmsis_nvic.h\"",
+        "STM32F070xB",
+        "TRANSACTION_QUEUE_SIZE_SPI=2",
+        "USE_FULL_LL_DRIVER",
+        "USE_HAL_DRIVER",
+        "__CMSIS_RTOS",
+        "__CORTEX_M0",
+        "__MBED_CMSIS_RTOS_CM"
+    ]
+}
