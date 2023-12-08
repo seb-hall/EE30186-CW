@@ -13,9 +13,9 @@
     {
         "module": "RotaryInput.o",
         "size": {
-            ".text": 100,
+            ".text": 88,
             ".data": 0,
-            ".bss": 212,
+            ".bss": 208,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
@@ -24,9 +24,9 @@
     {
         "module": "TachoInput.o",
         "size": {
-            ".text": 60,
+            ".text": 48,
             ".data": 0,
-            ".bss": 108,
+            ".bss": 104,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
@@ -57,7 +57,7 @@
     {
         "module": "[lib]\\mc_p.l",
         "size": {
-            ".text": 942,
+            ".text": 1022,
             ".data": 12,
             ".bss": 40,
             ".text-delta": 0,
@@ -79,10 +79,10 @@
     {
         "module": "main.o",
         "size": {
-            ".text": 124,
+            ".text": 386,
             ".data": 0,
-            ".bss": 0,
-            ".text-delta": -2,
+            ".bss": 464,
+            ".text-delta": 4,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -90,7 +90,7 @@
     {
         "module": "mbed-os\\cmsis",
         "size": {
-            ".text": 8646,
+            ".text": 8754,
             ".data": 168,
             ".bss": 5985,
             ".text-delta": 0,
@@ -101,7 +101,7 @@
     {
         "module": "mbed-os\\connectivity",
         "size": {
-            ".text": 385,
+            ".text": 511,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -112,7 +112,7 @@
     {
         "module": "mbed-os\\drivers",
         "size": {
-            ".text": 708,
+            ".text": 1464,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -123,7 +123,7 @@
     {
         "module": "mbed-os\\hal",
         "size": {
-            ".text": 1714,
+            ".text": 1860,
             ".data": 4,
             ".bss": 58,
             ".text-delta": 0,
@@ -134,9 +134,9 @@
     {
         "module": "mbed-os\\platform",
         "size": {
-            ".text": 7462,
+            ".text": 7526,
             ".data": 64,
-            ".bss": 340,
+            ".bss": 344,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
@@ -145,7 +145,7 @@
     {
         "module": "mbed-os\\rtos",
         "size": {
-            ".text": 350,
+            ".text": 446,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -156,9 +156,9 @@
     {
         "module": "mbed-os\\targets",
         "size": {
-            ".text": 7874,
+            ".text": 14137,
             ".data": 4,
-            ".bss": 1142,
+            ".bss": 1162,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
@@ -166,10 +166,10 @@
     },
     {
         "summary": {
-            "static_ram": 9161,
+            "static_ram": 9641,
             "static_ram_delta": 0,
-            "total_flash": 28793,
-            "total_flash_delta": -2
+            "total_flash": 36670,
+            "total_flash_delta": 4
         }
     }
 ]
