@@ -2,7 +2,7 @@
     {
         "module": "LCD_ST7066U.o",
         "size": {
-            ".text": 72,
+            ".text": 56,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -35,7 +35,7 @@
     {
         "module": "TextLCD.o",
         "size": {
-            ".text": 864,
+            ".text": 44,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -57,20 +57,9 @@
     {
         "module": "[lib]\\mc_p.l",
         "size": {
-            ".text": 1260,
+            ".text": 942,
             ".data": 12,
             ".bss": 40,
-            ".text-delta": 0,
-            ".data-delta": 0,
-            ".bss-delta": 0
-        }
-    },
-    {
-        "module": "[lib]\\mf_p.l",
-        "size": {
-            ".text": 1188,
-            ".data": 0,
-            ".bss": 0,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
@@ -90,10 +79,10 @@
     {
         "module": "main.o",
         "size": {
-            ".text": 132,
+            ".text": 124,
             ".data": 0,
-            ".bss": 36,
-            ".text-delta": 0,
+            ".bss": 0,
+            ".text-delta": -2,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -101,7 +90,7 @@
     {
         "module": "mbed-os\\cmsis",
         "size": {
-            ".text": 8754,
+            ".text": 8646,
             ".data": 168,
             ".bss": 5985,
             ".text-delta": 0,
@@ -123,7 +112,7 @@
     {
         "module": "mbed-os\\drivers",
         "size": {
-            ".text": 852,
+            ".text": 708,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -145,7 +134,7 @@
     {
         "module": "mbed-os\\platform",
         "size": {
-            ".text": 8694,
+            ".text": 7462,
             ".data": 64,
             ".bss": 340,
             ".text-delta": 0,
@@ -156,7 +145,7 @@
     {
         "module": "mbed-os\\rtos",
         "size": {
-            ".text": 438,
+            ".text": 350,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -167,9 +156,9 @@
     {
         "module": "mbed-os\\targets",
         "size": {
-            ".text": 10577,
+            ".text": 7874,
             ".data": 4,
-            ".bss": 1214,
+            ".bss": 1142,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
@@ -177,10 +166,10 @@
     },
     {
         "summary": {
-            "static_ram": 9269,
+            "static_ram": 9161,
             "static_ram_delta": 0,
-            "total_flash": 35418,
-            "total_flash_delta": 0
+            "total_flash": 28793,
+            "total_flash_delta": -2
         }
     }
 ]

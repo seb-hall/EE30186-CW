@@ -287,4 +287,4 @@ BUILD\NUCLEO_F070RB\ARMC6\main.o: main.cpp \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
   mbed-os\platform\include\platform\FileLike.h RotaryInput.h \
-  TachoInput.h TextLCD.h
+  TachoInput.h

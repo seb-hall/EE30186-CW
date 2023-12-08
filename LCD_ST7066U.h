@@ -52,7 +52,7 @@ public:
     void writeLine(const char* text, int line);
     void writeCharacter(const char c, int row, int column);
     void writeCharacters(const char* text, int row, int column);
-private:
+//private:
     void init();
     void startUp();
     void locate(int row, int column);
@@ -61,7 +61,7 @@ private:
     void writeData(char value);
     void writeTime();
     void character (int row, int column, char c);
-    int rows() {return 2;}
+    int rows() {return 1;}
     int columns() {return 16;}
     int address(int row, int column);
     DigitalOut _rs;
