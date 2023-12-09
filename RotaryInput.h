@@ -9,8 +9,8 @@
 constexpr std::chrono::milliseconds debounceThreshold = 10ms;
 
 //  encoder pins
-const PinName pinA = PA_1;
-const PinName pinB = PA_4;
+const PinName pinA = PA_4;
+const PinName pinB = PA_1;
 
 //  init function to set up interrupts
 void RotaryInput_Init();

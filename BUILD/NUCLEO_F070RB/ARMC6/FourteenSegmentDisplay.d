@@ -1,5 +1,6 @@
-BUILD\NUCLEO_F070RB\ARMC6\main.o: main.cpp \
-  BUILD\NUCLEO_F070RB\ARMC6\mbed_config.h mbed-os\mbed.h \
+BUILD\NUCLEO_F070RB\ARMC6\FourteenSegmentDisplay.o: \
+  FourteenSegmentDisplay.cpp BUILD\NUCLEO_F070RB\ARMC6\mbed_config.h \
+  FourteenSegmentDisplay.h mbed-os\mbed.h \
   mbed-os\platform\include\platform\mbed_version.h \
   mbed-os\rtos\include\rtos\rtos.h \
   mbed-os\rtos\include\rtos\internal\mbed_rtos_storage.h \
@@ -286,5 +287,4 @@ BUILD\NUCLEO_F070RB\ARMC6\main.o: main.cpp \
   mbed-os\platform\include\platform\ScopedRamExecutionLock.h \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
-  mbed-os\platform\include\platform\FileLike.h RotaryInput.h \
-  FourteenSegmentDisplay.h TempSensor.h ButtonInput.h TachoInput.h
+  mbed-os\platform\include\platform\FileLike.h

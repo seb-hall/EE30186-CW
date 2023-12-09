@@ -7,31 +7,46 @@
 #include <cstdio>
 
 static InterruptIn tachoInterrupt(tachoPin);
-static Timer timeSinceLastTacho;
+static Timer tachoTimer;
+static Timer lastPulseTimer;
 
 static void TachoRise();
 
-static float lastFrequency = 0.0f;
+volatile unsigned long pulseCount = 0;
 
 //  init function to set up interrupts
 void TachoInput_Init() {
-    // start timers
-    timeSinceLastTacho.start();
 
     // set interrupt callbacks
     tachoInterrupt.rise(TachoRise);
 
+    // start tacho timer
+    tachoTimer.start();
+    lastPulseTimer.start();
+}
+
+
+int TachoInput_GetRpm() {
+
+    long timeElapsed = tachoTimer.elapsed_time().count(); // Time in microseconds
+    tachoTimer.reset();
+
+    tachoInterrupt.disable_irq();
+    unsigned long count = pulseCount;
+    pulseCount = 0;
+    tachoInterrupt.enable_irq();
+
+    // Calculate RPM (adjust the formula based on your fan's specification)
+    unsigned int rpm = (count * 60 * 1000000) / (timeElapsed * pulsesPerRevolution);
+    return rpm;
 }
 
 //  callback triggered by tacho going high
 void TachoRise() { 
-    long long timeSinceLastHigh = timeSinceLastTacho.elapsed_time().count();
-    timeSinceLastTacho.reset();
 
-    lastFrequency = 1.0f/((float) timeSinceLastHigh / 1000000.0f);
-    //lastFrequency = 1.0f;
-}
+    if (lastPulseTimer.elapsed_time().count() > 100) {
+        lastPulseTimer.reset();
+        pulseCount++;
 
-float TachoInput_GetSpeed() {
-    return lastFrequency;
+    }
 }

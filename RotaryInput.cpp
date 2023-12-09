@@ -63,12 +63,18 @@ void PinARise() {
             //  if Pin B is also high then it went high before this
             //  and has an advanced phase
             if (isPinBHigh) {
-                //  increment the position by 1
-                encoderPosition += 1;
+                
+                if (encoderPosition < 15) {
+                    //  increment the position by 1
+                    encoderPosition += 1;
+                }
             //  otherwise it has a retarded phase
             } else {
-                //  decrement the position by 1
-                encoderPosition -= 1;                
+                if (encoderPosition > 0) {
+                    //  decrement the position by 1
+                    encoderPosition -= 1;   
+                }
+             
             }
         }
     }

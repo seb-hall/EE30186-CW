@@ -1,8 +1,30 @@
 [
     {
+        "module": "ButtonInput.o",
+        "size": {
+            ".text": 288,
+            ".data": 0,
+            ".bss": 105,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "FourteenSegmentDisplay.o",
+        "size": {
+            ".text": 328,
+            ".data": 0,
+            ".bss": 216,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
         "module": "LCD_ST7066U.o",
         "size": {
-            ".text": 56,
+            ".text": 60,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -13,9 +35,9 @@
     {
         "module": "RotaryInput.o",
         "size": {
-            ".text": 88,
+            ".text": 488,
             ".data": 0,
-            ".bss": 208,
+            ".bss": 214,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
@@ -24,20 +46,20 @@
     {
         "module": "TachoInput.o",
         "size": {
-            ".text": 48,
+            ".text": 248,
             ".data": 0,
-            ".bss": 104,
+            ".bss": 132,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
         }
     },
     {
-        "module": "TextLCD.o",
+        "module": "TempSensor.o",
         "size": {
-            ".text": 44,
+            ".text": 92,
             ".data": 0,
-            ".bss": 0,
+            ".bss": 250,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
@@ -57,9 +79,20 @@
     {
         "module": "[lib]\\mc_p.l",
         "size": {
-            ".text": 1022,
+            ".text": 1060,
             ".data": 12,
             ".bss": 40,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "[lib]\\mf_p.l",
+        "size": {
+            ".text": 1456,
+            ".data": 0,
+            ".bss": 0,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
@@ -79,10 +112,10 @@
     {
         "module": "main.o",
         "size": {
-            ".text": 386,
-            ".data": 0,
-            ".bss": 464,
-            ".text-delta": 4,
+            ".text": 636,
+            ".data": 5,
+            ".bss": 96,
+            ".text-delta": -28,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -101,7 +134,7 @@
     {
         "module": "mbed-os\\connectivity",
         "size": {
-            ".text": 511,
+            ".text": 531,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -112,7 +145,7 @@
     {
         "module": "mbed-os\\drivers",
         "size": {
-            ".text": 1464,
+            ".text": 2050,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -134,7 +167,7 @@
     {
         "module": "mbed-os\\platform",
         "size": {
-            ".text": 7526,
+            ".text": 7530,
             ".data": 64,
             ".bss": 344,
             ".text-delta": 0,
@@ -145,7 +178,7 @@
     {
         "module": "mbed-os\\rtos",
         "size": {
-            ".text": 446,
+            ".text": 438,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -156,9 +189,9 @@
     {
         "module": "mbed-os\\targets",
         "size": {
-            ".text": 14137,
+            ".text": 16944,
             ".data": 4,
-            ".bss": 1162,
+            ".bss": 1234,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
@@ -166,10 +199,10 @@
     },
     {
         "summary": {
-            "static_ram": 9641,
+            "static_ram": 9955,
             "static_ram_delta": 0,
-            "total_flash": 36670,
-            "total_flash_delta": 4
+            "total_flash": 43096,
+            "total_flash_delta": -28
         }
     }
 ]
