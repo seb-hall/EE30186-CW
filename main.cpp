@@ -13,7 +13,7 @@
 #include "TachoInput.h"
 #include <cstdio>
 
-#include <vector>
+#include <deque>
 
 enum RunMode {
     PC_CONTROL_DISPLAY_PC,
@@ -27,27 +27,28 @@ PwmOut fan(PB_0);
 
 RunMode mode = RunMode::TEMP_CONTROL_DISPLAY_FAN;
 
-
-const unsigned int MAX_RPM = 2000;
+const unsigned int MAX_RPM = 2300;
+const unsigned int MAX_RPM_CHANGE_ALLOWED = 3000;
+const unsigned int MAX_RPM_READING_ALLOWED = 3000;
 const float KP = 0.2f;
-const float KI = 0.01f;
-const float KD = 0.001f;
 
 unsigned int currentRpm = 0;
 
-// Control variables
-float integral = 0.0;
-float previousError = 0.0;
+std::deque<int> rpmBuffer;
+const size_t bufferSize = 20; // Size of the moving average buffer
+unsigned int smoothedRpm = 0;
 
-
-Timer lastDisplayUpdate;
-int displayUpdateInterval = 500000;
+Timer displayUpdateTimer;
+int displayUpdateInterval = 1000000;
 
 Timer controlTimer;
 int controlUpdateInterval = 100000;
 
 void IncrementMode();
+void UpdateRpm();
+void UpdateSmoothedRpm();
 void SetFanRpm(unsigned int targetRpm);
+unsigned int RequestRpmFromTemp(int temp);
 
 int main() {
     
@@ -57,7 +58,7 @@ int main() {
 
     IncrementMode();
 
-    lastDisplayUpdate.start();
+    displayUpdateTimer.start();
     controlTimer.start();
 
     // 2kHz pwm signal
@@ -79,31 +80,23 @@ int main() {
                 }
 
                 float rotaryP = rotaryPc / 100.0f;
-             
-                DisplayTwoDigitInteger(rotaryPc);
 
+                DisplayTwoDigitInteger(rotaryPc);
+             
                 if (controlTimer.elapsed_time().count() > controlUpdateInterval) {
                     controlTimer.reset();
-
-                    unsigned int newRpm = TachoInput_GetRpm();
-                    printf("RPM: %d\n", newRpm);
-                    unsigned int diff;
-
-                    if (newRpm > currentRpm) {
-                        diff = newRpm - currentRpm;
-                    } else {
-                        diff = currentRpm - newRpm;
-                    }
-
-                    if (diff < 3000 && newRpm < 3000) {
-                        // only accept rpm update if its a sensible change
-                        currentRpm = newRpm;
-                    } else {
-                        //printf("BAD CHANGE: %d\n", newRpm - currentRpm);
-                    }
                     
+                    UpdateRpm();
 
                     SetFanRpm(rotaryP * MAX_RPM);
+                    
+                    UpdateSmoothedRpm();
+                }
+
+                if (displayUpdateTimer.elapsed_time().count() > displayUpdateInterval) {
+                    displayUpdateTimer.reset();
+
+                    
                 }
 
 
@@ -111,47 +104,85 @@ int main() {
             }
         case PC_CONTROL_DISPLAY_FAN: {
 
-                 int rotaryPosition = RotaryInput_GetPosition();
-
-
+                int rotaryPosition = RotaryInput_GetPosition();
                 int rotaryPc = rotaryPosition * 7;
                 if (rotaryPc > 99) {
                     rotaryPc = 99;
                 }
+
+                float rotaryP = rotaryPc / 100.0f;
              
-                
-               
-                fan.write((float)rotaryPosition/ 100.0f);
+                if (controlTimer.elapsed_time().count() > controlUpdateInterval) {
+                    controlTimer.reset();
+                    
+                    UpdateRpm();
 
-               // int encoderFrequency = TachoInput_GetSpeed();
-                /*
-                if (lastDisplayUpdate.elapsed_time().count() > displayUpdateInterval) {
-                    lastDisplayUpdate.reset();
+                    SetFanRpm(rotaryP * MAX_RPM);
+                    
+                    UpdateSmoothedRpm();
+                }
 
-                     if (encoderFrequency > 99) {
-                        DisplayTwoDigitInteger(99);
-                    } else {
-                        DisplayTwoDigitInteger(encoderFrequency);
-                    }
-                }*/
-               
-                
+                if (displayUpdateTimer.elapsed_time().count() > displayUpdateInterval) {
+                    displayUpdateTimer.reset();
 
-                
-                // print updates
-               // printf("ENCODER %d FREQUENCY: %d\n", rotaryPosition, (int)encoderFrequency);
+                    int fanSpeedPc = (smoothedRpm * 100) / MAX_RPM;
+                    DisplayTwoDigitInteger(fanSpeedPc);
+                    //printf("FAN SPEED SMOOTH %d\n", fanSpeedPc);
+                }
+
+
 
             
             break;
             }
         case TEMP_CONTROL_DISPLAY_TEMP: {
+
                 int temp = ReadTemperature();
 
-                DisplayTwoDigitInteger(temp);
+                if (controlTimer.elapsed_time().count() > controlUpdateInterval) {
+                    controlTimer.reset();
+                    
+                    UpdateRpm();
+
+                    int targetRpm = RequestRpmFromTemp(temp);
+
+                    SetFanRpm(targetRpm);
+                    
+                    UpdateSmoothedRpm();
+                }
+
+                if (displayUpdateTimer.elapsed_time().count() > displayUpdateInterval) {
+                    displayUpdateTimer.reset();
+
+                    DisplayTwoDigitInteger(temp);
+                }
+
                 break;
             }
         default:
-            
+
+        
+            int temp = ReadTemperature();
+
+            if (controlTimer.elapsed_time().count() > controlUpdateInterval) {
+                controlTimer.reset();
+                
+                UpdateRpm();
+
+                int targetRpm = RequestRpmFromTemp(temp);
+
+                SetFanRpm(targetRpm);
+                
+                UpdateSmoothedRpm();
+            }
+
+            if (displayUpdateTimer.elapsed_time().count() > displayUpdateInterval) {
+                displayUpdateTimer.reset();
+
+                int fanSpeedPc = (smoothedRpm * 100) / MAX_RPM;
+                DisplayTwoDigitInteger(fanSpeedPc);
+            }
+
             break;
 
        }
@@ -161,6 +192,8 @@ int main() {
 
 
 void IncrementMode() {
+
+    SetFanRpm(0);
 
     switch (mode) {
         case PC_CONTROL_DISPLAY_PC:
@@ -185,23 +218,61 @@ void IncrementMode() {
     ThisThread::sleep_for(1000ms);
 }
 
+void UpdateRpm() {
+    unsigned int newRpm = TachoInput_GetRpm();
+    unsigned int diff;
+
+    if (newRpm > currentRpm) {
+        diff = newRpm - currentRpm;
+    } else {
+        diff = currentRpm - newRpm;
+    }
+
+    if (diff < MAX_RPM_CHANGE_ALLOWED && newRpm < MAX_RPM_READING_ALLOWED) {
+        // only accept rpm update if its a sensible change
+        currentRpm = newRpm;
+    }
+}
+
 void SetFanRpm(unsigned int targetRpm) {
 
     int error = targetRpm - currentRpm;
 
-    // Calculate control signal (in this case, a simple proportional control)
-    float pTerm = KP * error;
-    
-    integral += error * KI;
-
-    // Derivative term
-    float dTerm = KD * (error - previousError);
-    previousError = error;
-
-    int controlSignal = pTerm; //+ integral + dTerm;
+    // Calculate control signal
+    int controlSignal = KP * error;
 
     fan.pulsewidth_us(controlSignal);
 
-    printf("CONTROL: TARGET %u CURRENT %u ERROR %d OUTPUT %d - P %d I %d D %d \n", targetRpm, currentRpm, error, controlSignal, (int) pTerm, (int) integral, (int) dTerm);
+    //printf("CONTROL: TARGET %u CURRENT %u ERROR %d OUTPUT %d\n", targetRpm, currentRpm, error, controlSignal);
             
+}
+
+void UpdateSmoothedRpm() {
+    // Add new RPM value to the buffer
+    rpmBuffer.push_back(currentRpm);
+
+    // If the buffer exceeds the size limit, remove the oldest value
+    if (rpmBuffer.size() > bufferSize) {
+        rpmBuffer.pop_front();
+    }
+
+    // Calculate the average
+    int sum = 0;
+    for (int rpm : rpmBuffer) {
+        sum += rpm;
+    }
+
+    smoothedRpm = sum / rpmBuffer.size();
+
+}
+
+unsigned int RequestRpmFromTemp(int temp) {
+    if (temp <= 20) {
+        return 0;
+    } else if (temp >= 30) {
+        return MAX_RPM;
+    } else {
+        // Linear interpolation
+        return (unsigned int)(MAX_RPM * (temp - 20) / 10.0);
+    }
 }
